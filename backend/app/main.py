@@ -3,7 +3,7 @@ FastAPI main application for Issue Tracker API.
 """
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from sqlalchemy.exc import IntegrityError
 from app import database
 from app.routers import users, labels, issues, reports, imports
@@ -72,6 +72,13 @@ def root():
         "redoc_url": "/redoc",
         "version": "1.0.0"
     }
+
+
+# Redirect root to /docs for better user experience
+@app.get("/", include_in_schema=False)
+async def redirect_to_docs():
+    """Redirect root URL to API documentation"""
+    return RedirectResponse(url="/docs")
 
 
 if __name__ == "__main__":
